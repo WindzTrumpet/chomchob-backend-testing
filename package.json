@@ -1,0 +1,9 @@
+{
+  "name": "chomchob-backend-testing",
+  "version": "1.0.0",
+  "description": "This is for testing my skill to apply for ChomCHOB.",
+  "main": "index.js",
+  "repository": "https://github.com/WindzTrumpet/chomchob-backend-testing",
+  "author": "WindzTrumpet",
+  "license": "MIT"
+}
