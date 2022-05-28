@@ -1,7 +1,7 @@
 import express from 'express'
-import Config from './config/index.js'
-import routes from './routes/index.js'
-import database from './lib/database.js'
+import Config from './config'
+import routes from './routes'
+import database from './lib/database'
 
 const config = new Config()
 const app = express()

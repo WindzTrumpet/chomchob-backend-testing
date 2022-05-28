@@ -1,5 +1,5 @@
-import development from './development.js'
-import production from './production.js'
+import development from './development'
+import production from './production'
 import _ from 'lodash'
 
 const REQUIRED_ENV = ['PORT']

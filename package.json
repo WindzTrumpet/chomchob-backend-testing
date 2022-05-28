@@ -5,8 +5,8 @@
   "type": "module",
   "main": "programming/index.js",
   "scripts": {
-    "start": "node programming/index.js",
-    "dev": "nodemon"
+    "start": "node --es-module-specifier-resolution=node programming/index.js",
+    "dev": "nodemon --es-module-specifier-resolution=node"
   },
   "repository": "https://github.com/WindzTrumpet/chomchob-backend-testing",
   "author": "WindzTrumpet",
