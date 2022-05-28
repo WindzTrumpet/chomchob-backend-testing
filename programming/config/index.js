@@ -29,4 +29,8 @@ export default class Config {
     get port() {
         return this.#config.port
     }
+
+    get db() {
+        return this.#config.db
+    }
 }
