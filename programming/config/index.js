@@ -2,7 +2,7 @@ import development from './development'
 import production from './production'
 import _ from 'lodash'
 
-const REQUIRED_ENV = ['PORT']
+const REQUIRED_ENV = ['PORT', 'SECRET', 'DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASS', 'DB_NAME']
 
 export default class Config {
     #config
@@ -28,6 +28,10 @@ export default class Config {
 
     get port() {
         return this.#config.port
+    }
+
+    get secret() {
+        return this.#config.secret
     }
 
     get db() {

@@ -2,6 +2,7 @@ const env = process.env
 
 export default {
     port: env.PORT,
+    secret: env.SECRET,
     db: {
         host: env.DB_HOST,
         port: env.DB_PORT,
