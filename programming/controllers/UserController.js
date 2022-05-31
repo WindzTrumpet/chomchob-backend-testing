@@ -116,6 +116,27 @@ export async function verifyToken(req, res, next) {
     }
 }
 
+export function onlyAdmin(req, res, next) {
+    try {
+        const user = req.user
+
+        if (!user) throw Error('verifyToken should call before using this middleware!')
+        else if (user.role !== 'admin') return res.status(403).json({
+            error: true,
+            code: 'forbidden'
+        })
+
+        next()
+    } catch(err) {
+        console.error(err)
+
+        return res.status(500).json({
+            error: true,
+            code: 'unknown',
+        })
+    }
+}
+
 export function profile(req, res) {
     return res.json(req.user.toJSON())
 }

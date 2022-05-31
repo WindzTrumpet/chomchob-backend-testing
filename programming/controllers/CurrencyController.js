@@ -1,4 +1,4 @@
-import {Currency} from '../models/currency.model.js'
+import { Currency } from '../models/currency.model'
 import _ from 'lodash'
 
 function sumWalletBalance(wallets) {
@@ -66,6 +66,28 @@ export async function get(req, res) {
             error: false,
             data: result,
         })
+    } catch (err) {
+        console.error(err)
+
+        return res.status(500).json({
+            error: true,
+            code: 'unknown',
+        })
+    }
+}
+
+export async function create(req, res) {
+    try {
+        const body = req.body
+
+        if (!_.has(body, 'name')) return res.status(400).json({
+            error: true,
+            code: 'parameter-invalid'
+        })
+
+        const currency = await Currency.create({ name: body['name'] })
+
+        res.json(currency.toJSON())
     } catch (err) {
         console.error(err)
 
