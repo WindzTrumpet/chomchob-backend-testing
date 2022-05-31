@@ -72,6 +72,7 @@ export async function transfer(req, res) {
             let exchangeRate = 1
 
             if (originCurrencyID === destinationCurrencyID) {
+                // User cannot transfer the same currency to self
                 if (originUserID === destinationUserID) throw new ApiError('deposit-yourself')
 
                 originWallet.balance -= amount
@@ -84,6 +85,7 @@ export async function transfer(req, res) {
                     }
                 })
 
+                // Admin should create an exchange first. If not created, the currency is considered to be non-exchangeable.
                 if (!exchange) return res.status(400).json({
                     error: true,
                     code: 'currency-cannot-exchange',

@@ -19,6 +19,7 @@ export async function list(req, res) {
                 name: currency.name,
             }
 
+            // Only the admin can see the total balance of currency
             if (userRole === 'admin') {
                 result['balance'] = sumWalletBalance(currency['Wallets'])
             }
@@ -58,6 +59,7 @@ export async function get(req, res) {
             name: currency.name,
         }
 
+        // Only the admin can see the total balance of currency
         if (userRole === 'admin') {
             result['balance'] = sumWalletBalance(currency['Wallets'])
         }

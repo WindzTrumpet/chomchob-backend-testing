@@ -1,3 +1,4 @@
+import database from '../lib/database'
 import { User, UserAccount } from '../models/user.model'
 import jwt from 'jsonwebtoken'
 import Config from '../config'
@@ -6,34 +7,48 @@ import _ from 'lodash'
 const config = new Config()
 
 export async function createUser(req, res) {
-    const body = req.body
-    const requiredFields = ['name', 'role', 'account.username', 'account.password']
+    try {
+        const body = req.body
+        const requiredFields = ['name', 'role', 'account.username', 'account.password']
 
-    const isValid = _.every(requiredFields, o => _.has(body, o))
+        const isValid = _.every(requiredFields, o => _.has(body, o))
 
-    if (!isValid || !['admin', 'user'].includes(body.role)) return res.status(400).json({
-        error: true,
-        code: 'parameter-invalid'
-    })
+        if (!isValid || !['admin', 'user'].includes(body.role)) return res.status(400).json({
+            error: true,
+            code: 'parameter-invalid'
+        })
 
-    const user = await User.create({
-        name: body.name,
-        role: body.role,
-    })
+        const user = await database.transaction(async (t) => {
+            const user = await User.create({
+                name: body.name,
+                role: body.role,
+            })
 
-    const account = body['account']
+            const account = body['account']
 
-    await UserAccount.create({
-        username: account.username,
-        password: account.password,
-        userID: user.id
-    })
+            await UserAccount.create({
+                username: account.username,
+                password: account.password,
+                userID: user.id
+            })
 
-    return res.json(user.toJSON())
+            return user
+        })
+
+        return res.json(user.toJSON())
+    } catch (err) {
+        console.error(err)
+
+        return res.status(500).json({
+            error: true,
+            code: 'unknown',
+        })
+    }
 }
 
 export async function authenticate(req, res) {
     try {
+        // Basic Authentication
         const authorization = req.headers['authorization']
 
         if (!authorization) return res.status(401).json({
@@ -78,6 +93,7 @@ export async function authenticate(req, res) {
 
 export async function verifyToken(req, res, next) {
     try {
+        // Bearer Authentication
         const authorization = req.headers['authorization']
 
         if (!authorization || !authorization.startsWith('Bearer ')) throw jwt.JsonWebTokenError
@@ -138,5 +154,14 @@ export function onlyAdmin(req, res, next) {
 }
 
 export function profile(req, res) {
-    return res.json(req.user.toJSON())
+    try {
+        return res.json(req.user.toJSON())
+    } catch (err) {
+        console.error(err)
+
+        return res.status(500).json({
+            error: true,
+            code: 'unknown',
+        })
+    }
 }
