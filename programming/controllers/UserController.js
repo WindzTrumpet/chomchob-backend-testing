@@ -1,4 +1,4 @@
-import { User, UserAccount } from '../models/User'
+import { User, UserAccount } from '../models/user.model'
 import jwt from 'jsonwebtoken'
 import Config from '../config'
 import _ from 'lodash'

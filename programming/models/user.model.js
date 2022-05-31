@@ -1,4 +1,5 @@
-import database, { Model, DataTypes } from '../lib/database'
+import database, { DataTypes } from '../lib/database'
+import { Wallet } from './wallet.model.js'
 import useBcrypt from 'sequelize-bcrypt'
 
 const User = database.define('User', {
@@ -30,6 +31,14 @@ User.hasOne(UserAccount, {
     onDelete: 'CASCADE',
 })
 UserAccount.belongsTo(User, {
+    foreignKey: 'userID',
+})
+
+User.hasMany(Wallet, {
+    foreignKey: 'userID',
+    onDelete: 'CASCADE'
+})
+Wallet.belongsTo(User, {
     foreignKey: 'userID',
 })
 
