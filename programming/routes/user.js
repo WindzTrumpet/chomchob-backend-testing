@@ -8,5 +8,6 @@ router.post('/create', userCtrl.verifyToken, userCtrl.onlyAdmin, userCtrl.create
 router.post('/auth', userCtrl.authenticate)
 router.get('/profile', userCtrl.verifyToken, userCtrl.profile)
 router.get('/wallet', userCtrl.verifyToken, walletCtrl.userCurrentBalance)
+router.post('/wallet/transfer', userCtrl.verifyToken, walletCtrl.transfer)
 
 export default router

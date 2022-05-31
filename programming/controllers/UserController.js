@@ -6,11 +6,6 @@ import _ from 'lodash'
 const config = new Config()
 
 export async function createUser(req, res) {
-    if (req.user.role !== 'admin') return res.status(403).json({
-        error: true,
-        code: 'forbidden'
-    })
-
     const body = req.body
     const requiredFields = ['name', 'role', 'account.username', 'account.password']
 
