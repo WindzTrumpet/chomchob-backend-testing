@@ -26,6 +26,7 @@ Currency.hasMany(Exchange, {
 })
 Exchange.belongsTo(Currency, {
     foreignKey: 'originCurrencyID',
+    as: 'originCurrency',
 })
 
 Currency.hasMany(Exchange, {
@@ -34,6 +35,7 @@ Currency.hasMany(Exchange, {
 })
 Exchange.belongsTo(Currency, {
     foreignKey: 'destinationCurrencyID',
+    as: 'destinationCurrency',
 })
 
 export { Currency }

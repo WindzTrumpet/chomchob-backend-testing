@@ -62,7 +62,7 @@ export async function get(req, res) {
             result['balance'] = sumWalletBalance(currency['Wallets'])
         }
 
-        res.json({
+        return res.json({
             error: false,
             data: result,
         })
@@ -87,7 +87,7 @@ export async function create(req, res) {
 
         const currency = await Currency.create({ name: body['name'] })
 
-        res.json(currency.toJSON())
+        return res.json(currency.toJSON())
     } catch (err) {
         console.error(err)
 
