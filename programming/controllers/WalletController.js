@@ -66,7 +66,6 @@ export async function transfer(req, res) {
                     userID: destinationUserID,
                     currencyID: destinationCurrencyID,
                 },
-                defaults: { balance: 0 },
                 transaction: t,
             })
 
@@ -128,6 +127,71 @@ export async function transfer(req, res) {
                 code: err.message,
             })
         }
+
+        console.error(err)
+
+        return res.status(500).json({
+            error: true,
+            code: 'unknown',
+        })
+    }
+}
+
+export async function adjust(req, res) {
+    try {
+        const body = req.body
+        const requiredFields = ['userID', 'currencyID', 'amount']
+
+        const isValid = _.every(requiredFields, o => _.has(body, o))
+
+        if (!isValid) return res.status(400).json({
+            error: true,
+            code: 'parameter-invalid'
+        })
+
+        await database.transaction(async (t) => {
+            const user = req.user
+            const userID = body['userID']
+            const currencyID = body['currencyID']
+            const amount = body['amount']
+
+            if (amount == 0) throw new ApiError('amount-is-zero')
+
+            const [wallet, _] = await Wallet.findOrCreate({
+                where: {
+                    userID,
+                    currencyID
+                },
+                transaction: t,
+            })
+
+            wallet.balance += amount
+
+            await Promise.all([
+                wallet.save({ transaction: t }),
+                Transaction.create({
+                    amount: amount,
+                    userID: userID,
+                    withUserID: user.id,
+                    originCurrencyID: currencyID,
+                    destinationCurrencyID: currencyID,
+                    transactionType: amount > 0 ? 'deposit' : 'withdraw',
+                }, { transaction: t }),
+            ])
+        })
+
+        res.json({
+            error: false
+        })
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return res.status(400).json({
+                error: true,
+                code: err.message,
+            })
+        }
+
+        console.error(err)
 
         return res.status(500).json({
             error: true,

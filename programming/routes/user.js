@@ -9,5 +9,6 @@ router.post('/auth', userCtrl.authenticate)
 router.get('/profile', userCtrl.verifyToken, userCtrl.profile)
 router.get('/wallet', userCtrl.verifyToken, walletCtrl.userCurrentBalance)
 router.post('/wallet/transfer', userCtrl.verifyToken, walletCtrl.transfer)
+router.post('/wallet/adjust', userCtrl.verifyToken, userCtrl.onlyAdmin, walletCtrl.adjust)
 
 export default router
