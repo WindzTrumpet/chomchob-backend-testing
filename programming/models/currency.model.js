@@ -12,7 +12,7 @@ const Currency = database.define('Currency', {
     }
 })
 
-Currency.hasOne(Wallet, {
+Currency.hasMany(Wallet, {
     foreignKey: 'currencyID',
     onDelete: 'RESTRICT',
 })
