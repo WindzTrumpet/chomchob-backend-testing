@@ -52,6 +52,11 @@ export async function get(req, res) {
             }]
         })
 
+        if (!exchange) return res.status(404).json({
+            error: true,
+            code: 'exchange-not-found',
+        })
+
         res.json({
             id: exchange.id,
             originCurrency: exchange.originCurrency.name,
@@ -87,6 +92,52 @@ export async function create(req, res) {
         })
 
         return res.json(exchange.toJSON())
+    } catch (err) {
+        console.error(err)
+
+        return res.status(500).json({
+            error: true,
+            code: 'unknown',
+        })
+    }
+}
+
+export async function update (req, res) {
+    try {
+        const exchangeID = req.params['exchangeID']
+        const body = req.body
+
+        if (!_.has(body, 'rate')) return res.status(400).json({
+            error: true,
+            code: 'parameter-invalid'
+        })
+
+        const exchange = await Exchange.findByPk(exchangeID, {
+            attributes: ['id', 'rate'],
+            include: [{
+                association: 'originCurrency',
+                attributes: ['name']
+            }, {
+                association: 'destinationCurrency',
+                attributes: ['name']
+            }]
+        })
+
+        if (!exchange) return res.status(404).json({
+            error: true,
+            code: 'exchange-not-found',
+        })
+
+        exchange.rate = body.rate
+
+        await exchange.save()
+
+        res.json({
+            id: exchange.id,
+            originCurrency: exchange.originCurrency.name,
+            destinationCurrency: exchange.destinationCurrency.name,
+            rate: parseFloat(exchange.rate),
+        })
     } catch (err) {
         console.error(err)
 

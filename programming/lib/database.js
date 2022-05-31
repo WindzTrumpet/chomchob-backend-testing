@@ -8,6 +8,7 @@ const sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.pass, {
     host: dbConfig.host,
     port: dbConfig.port,
     dialect: 'mariadb',
+    timezone: 'Asia/Bangkok',
     logging: process.env.NODE_ENV === 'production' ? false : console.log,
 })
 

@@ -105,6 +105,11 @@ export async function verifyToken(req, res, next) {
                 error: true,
                 code: 'unauthorized',
             })
+        } else if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                error: true,
+                code: 'token-expired',
+            })
         }
 
         console.error(err)
