@@ -14,7 +14,7 @@ export default class Config {
     #init() {
         if (process.env.NODE_ENV === 'production') {
             // Validate required ENV
-            if (!_.has(process.env, REQUIRED_ENV)) {
+            if (!_.every(REQUIRED_ENV, o => _.has(process.env, o))) {
                 console.error(`Missing some required environment variable.\nRequired ENV: ${_.join(REQUIRED_ENV, ', ')}`)
 
                 process.exit(1)
