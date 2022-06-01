@@ -1,0 +1,46 @@
+version: "3.5"
+services:
+  nginx:
+    image: nginx:1.22
+    container_name: nginx
+    restart: always
+    depends_on:
+      - api
+    environment:
+      - API_PORT=${PORT}
+    volumes:
+      - ./docker/nginx:/etc/nginx/templates
+    ports:
+      - "80:80"
+    networks:
+      - wallet_default
+  api:
+    build: .
+    image: wallet-api
+    container_name: wallet-api
+    restart: always
+    depends_on:
+      - db
+    expose:
+      - ${PORT}
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    networks:
+      - wallet_default
+  db:
+    image: mariadb:10.6.8
+    container_name: wallet-db
+    restart: always
+    environment:
+      - MARIADB_DATABASE=${DB_NAME}
+      - MARIADB_ROOT_PASSWORD=${DB_PASS}
+    volumes:
+      - ./docker/database:/var/lib/mysql
+    networks:
+      - wallet_default
+
+networks:
+  wallet_default:
+    name: wallet-default

@@ -2,8 +2,28 @@
   "name": "chomchob-backend-testing",
   "version": "1.0.0",
   "description": "This is for testing my skill to apply for ChomCHOB.",
-  "main": "index.js",
+  "type": "module",
+  "main": "programming/index.js",
+  "scripts": {
+    "start": "node --es-module-specifier-resolution=node programming/index.js",
+    "dev": "nodemon --es-module-specifier-resolution=node"
+  },
   "repository": "https://github.com/WindzTrumpet/chomchob-backend-testing",
   "author": "WindzTrumpet",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mariadb": "^3.0.0",
+    "sequelize": "^6.20.1",
+    "sequelize-bcrypt": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/lodash": "^4.14.182",
+    "nodemon": "^2.0.16"
+  }
 }
